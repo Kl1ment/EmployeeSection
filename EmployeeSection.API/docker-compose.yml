@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+    postgres:
+        restart: always
+        container_name: postgre_employeeSection
+        image: postgres:latest
+        environment:
+            POSTGRES_DB: "EmployeeSectionDb"
+            POSTGRES_USER: "postgres"
+            POSTGRES_PASSWORD: "1234"
+        ports:
+            - "5432:5432"
