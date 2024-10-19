@@ -1,4 +1,6 @@
-﻿using EmployeeSection.DataAccess;
+﻿using EmployeeSection.API.Contracts;
+using EmployeeSection.Core.Models;
+using EmployeeSection.DataAccess;
 using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeSection.API
@@ -18,6 +20,14 @@ namespace EmployeeSection.API
                     context.Database.Migrate();
                 }
             }
+        }
+
+        public static EmployeeResponse MapToResponse(this Employee employee)
+        {
+            return new EmployeeResponse(
+                employee.Id,
+                employee.FullName,
+                employee.Profession);
         }
     }
 }

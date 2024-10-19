@@ -1,6 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
 using EmployeeSection.Core.Models;
-using EmployeeSection.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeSection.DataAccess.Repositories
@@ -15,16 +14,12 @@ namespace EmployeeSection.DataAccess.Repositories
         {
             var employeeEntity = await _context.Employees
                 .AsNoTracking()
-                .Where(e => e.Id == id)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(e => e.Id == id);
 
             if (employeeEntity == null)
                 return Result.Failure<Employee>("The employee was not found");
 
-            var employee = Employee.Create(
-                employeeEntity.Id,
-                employeeEntity.FullName,
-                employeeEntity.Profession);
+            var employee = employeeEntity.MapToModel();
 
             return employee;
         }
@@ -33,16 +28,12 @@ namespace EmployeeSection.DataAccess.Repositories
         {
             var employeeEntity = await _context.Employees
                 .AsNoTracking()
-                .Where(e => e.FullName == fullName)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(e => e.FullName == fullName);
 
             if (employeeEntity == null)
                 return Result.Failure<Employee>("The employee was not found");
 
-            var employee = Employee.Create(
-                employeeEntity.Id,
-                employeeEntity.FullName,
-                employeeEntity.Profession);
+            var employee = employeeEntity.MapToModel();
 
             return employee;
         }
@@ -55,23 +46,15 @@ namespace EmployeeSection.DataAccess.Repositories
                 .Take(PageSize)
                 .ToListAsync();
 
-            var employees = employeeEntities.Select(e =>
-                Employee.Create(
-                    e.Id,
-                    e.FullName,
-                    e.Profession)).ToList();
+            var employees = employeeEntities.Select(e => 
+                e.MapToModel()).ToList();
 
             return employees;
         }
 
         public async Task<Guid> AddAsync(Employee employee)
         {
-            var employeeEntity = new EmployeeEntity
-            {
-                Id = employee.Id,
-                FullName = employee.FullName,
-                Profession = employee.Profession
-            };
+            var employeeEntity = employee.MapToEntity();
 
             await _context.AddAsync(employeeEntity);
             await _context.SaveChangesAsync();
