@@ -1,3 +1,4 @@
+using EmployeeSection.API;
 using EmployeeSection.Application;
 using EmployeeSection.DataAccess;
 
@@ -26,5 +27,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapControllers();
+
+app.ApplyMigration();
 
 app.Run();

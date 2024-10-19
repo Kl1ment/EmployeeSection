@@ -16,7 +16,7 @@ namespace EmployeeSection.API.Controllers
         {
             var employeeRequest = await _employeeService.GetEmployeeByIdAsync(id);
 
-            return employeeResult(employeeRequest);
+            return EmployeeResult(employeeRequest);
         }
 
         [HttpGet]
@@ -24,7 +24,7 @@ namespace EmployeeSection.API.Controllers
         {
             var employeeRequest = await _employeeService.GetEmployeeByFullName(fullName);
 
-            return employeeResult(employeeRequest);
+            return EmployeeResult(employeeRequest);
         }
 
 
@@ -77,7 +77,7 @@ namespace EmployeeSection.API.Controllers
             return Ok(deletionResult.Value);
         }
 
-        private ActionResult<EmployeeResponse> employeeResult(CSharpFunctionalExtensions.Result<Employee> employeeRequest)
+        private ActionResult<EmployeeResponse> EmployeeResult(CSharpFunctionalExtensions.Result<Employee> employeeRequest)
         {
             if (employeeRequest.IsFailure)
                 return NotFound(employeeRequest.Error);
