@@ -49,10 +49,10 @@ namespace EmployeeSection.API.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult> UpdateEmployee([FromQuery] Guid id, EmployeeCreate employee)
+        public async Task<ActionResult> UpdateEmployee(EmployeeUpdate employee)
         {
             var updateResult = await employeeService.UpdateEmployeeAsync(
-                id,
+                employee.Id,
                 employee.FullName,
                 employee.Profession);
 

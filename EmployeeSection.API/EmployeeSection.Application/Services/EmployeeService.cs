@@ -41,11 +41,6 @@ namespace EmployeeSection.Application.Services
 
         public async Task<Result<Guid>> UpdateEmployeeAsync(Guid id, string fullName, string profession)
         {
-            var checkingEmployeeExistenceById = await employeeRepository.GetByIdAsync(id);
-
-            if (checkingEmployeeExistenceById.IsFailure)
-                return Result.Failure<Guid>(checkingEmployeeExistenceById.Error);
-
             var checkingEmployeeExistence = await employeeRepository.GetByFullNameAsync(fullName);
 
             if (checkingEmployeeExistence.IsSuccess && checkingEmployeeExistence.Value.Id != id)
@@ -61,11 +56,6 @@ namespace EmployeeSection.Application.Services
 
         public async Task<Result<Guid>> DeleteEmployeeAsync(Guid id)
         {
-            var checkingEmployeeExistence = await employeeRepository.GetByIdAsync(id);
-
-            if (checkingEmployeeExistence.IsFailure)
-                return Result.Failure<Guid>(checkingEmployeeExistence.Error);
-
             return await employeeRepository.DeleteAsync(id);
         }
     }

@@ -62,9 +62,9 @@ namespace EmployeeSection.DataAccess.Repositories
             return employeeEntity.Id;
         }
 
-        public async Task<Guid> UpdateAsync(Employee employee)
+        public async Task<Result<Guid>> UpdateAsync(Employee employee)
         {
-            await _context.Employees
+            var countUpdatedEmployees = await _context.Employees
                 .Where(e => e.Id == employee.Id)
                 .ExecuteUpdateAsync(e => e
                     .SetProperty(p => p.FullName, employee.FullName)
@@ -72,16 +72,22 @@ namespace EmployeeSection.DataAccess.Repositories
 
             await _context.SaveChangesAsync();
 
+            if (countUpdatedEmployees == 0)
+                return Result.Failure<Guid>("The employee was not found");
+
             return employee.Id;
         }
 
-        public async Task<Guid> DeleteAsync(Guid id)
+        public async Task<Result<Guid>> DeleteAsync(Guid id)
         {
-            await _context.Employees
+            int countDeletedEmployees = await _context.Employees
                 .Where(e => e.Id == id)
                 .ExecuteDeleteAsync();
 
             await _context.SaveChangesAsync();
+
+            if (countDeletedEmployees == 0)
+                return Result.Failure<Guid>("The employee was not found");
 
             return id;
         }
